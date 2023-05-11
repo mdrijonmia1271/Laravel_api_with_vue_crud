@@ -2,81 +2,55 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\UserValidation;
 use App\Models\User;
 use Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UserApiController extends Controller
 {
     public function index($id=null){
         if($id==''){
-            $users = User::get();
-            return response()->json(['users'=>$users],200);
+            return response()->json([
+                'users'=>User::get()
+            ],200);
         }else{
-            $users = User::find($id);
-            return response()->json(['users'=>$users],200);
+            return response()->json([
+                'users'=>User::find($id)
+            ],200);
         }
+
+        // return response()->json([
+        //     'message' => 'Password reset email sent.',
+        //     'data' => $response,
+        // ]);
+
+
     }
-    public function create(Request $request){
+    public function create(UserValidation $request){
         if($request->isMethod('post')){
             $data = $request->all();
-            // return $data;
-
-            $rules = [
-                'name'=>'required',
-                'email'=>'required|email|unique:users',
-                'password'=>'required',
-            ];
-
-            $customeMessage = [
-                'name.required'=>'Name is required',
-                'email.required'=>'Email is required',
-                'email.email'=>'Email must be a valid email',
-                'password.required'=>'Password is required',
-            ];
-
-            $validator = Validator::make( $data,$rules,$customeMessage);
-            if($validator->fails()){
-                return response()->json($validator->errors(),422);
-            }
-
+    
             $user = new User();
             $user->name = $data['name']; 
             $user->email = $data['email']; 
             $user->password = bcrypt($data['password']); 
             $user->save();
-            $message = 'User Successfully Added';
-            return response()->json(['message'=>$message],201);
+            return response()->json([
+                'message'=>'User Successfully Added'
+            ],201);
         }
     }
     
     //post api for multiple user
-    public function createMultiple(Request $request){
+    public function createMultiple(UserValidation $request){
         if($request->isMethod('post')){
             $data = $request->all();
             // return $data['users'];
             
-            $rules = [
-                'users.*.name'=>'required',
-                'users.*.email'=>'required|email|unique:users',
-                'users.*.password'=>'required',
-            ];
-            
-            $customeMessage = [
-                'users.*.name.required'=>'Name is required',
-                'users.*.email.required'=>'Email is required',
-                'users.*.email.email'=>'Email must be a valid email',
-                'users.*.password.required'=>'Password is required',
-            ];
-            
-            $validator = Validator::make( $data,$rules,$customeMessage);
-            if($validator->fails()){
-                return response()->json($validator->errors(),422);
-            }
-            
             foreach($data['users'] as $adduser){
-                $user = new User();
+            $user = new User();
             $user->name = $adduser['name']; 
             $user->email = $adduser['email']; 
             $user->password = bcrypt($adduser['password']); 
