@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Requests\EditedValidated;
+use App\Http\Requests\MultipleValidated;
 use App\Http\Requests\UserValidation;
 use App\Models\User;
 use Validator;
@@ -44,13 +45,13 @@ class UserApiController extends Controller
     }
     
     //post api for multiple user
-    public function createMultiple(UserValidation $request){
+    public function createMultiple(MultipleValidated $request){
         if($request->isMethod('post')){
             $data = $request->all();
             // return $data['users'];
             
             foreach($data['users'] as $adduser){
-            $user = new User();
+                $user = new User();
             $user->name = $adduser['name']; 
             $user->email = $adduser['email']; 
             $user->password = bcrypt($adduser['password']); 
@@ -62,32 +63,18 @@ class UserApiController extends Controller
     }
 
     //Put api for add update user details
-    public function edit(Request $request,$id){
+    public function edit(EditedValidated $request,$id){
         if($request->isMethod('put')){
             $data = $request->all();
             // return $data;
-    
-            $rules = [
-                'name'=>'required',
-                'email'=>'required',
-            ];
-    
-            $customeMessage = [
-                'name.required'=>'Name is required',
-                'email.required'=>'Email is required',
-            ];
-    
-            $validator = Validator::make($data,$rules,$customeMessage);
-            if($validator->fails()){
-                return response()->json($validator->errors(),422);
-            }
     
             $user = User::findOrFail($id);
             $user->name = $data['name']; 
             $user->email = $data['email']; 
             $user->save();
-            $message = 'User Successfully Updated';
-            return response()->json(['message'=>$message],202);
+            return response()->json([
+                'message'=>'User Successfully Updated'
+            ],202);
         }
     }
 
