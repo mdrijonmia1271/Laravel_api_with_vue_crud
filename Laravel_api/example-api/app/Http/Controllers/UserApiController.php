@@ -63,27 +63,6 @@ class UserApiController extends Controller
         }
     }
 
-    //Put api for add update user details
-    public function edit(EditedValidated $request,$id){
-        if($request->isMethod('put')){
-            $data = $request->all();
-            // return $data;
-    
-            $user = User::findOrFail($id);
-            $user->name = $data['name']; 
-            $user->email = $data['email']; 
-            $user->save();
-            return response()->json([
-                'message'=>'User Successfully Updated'
-            ],202);
-        }
-    }
-
-    // public function destroy($id=null){
-    //     User::findOrFail($id)->delete();
-    //     $message = 'User Successfully Deleted';
-    //     return response()->json(['message'=>$message],200);
-    // }
 
 
 }

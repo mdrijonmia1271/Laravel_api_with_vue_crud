@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\UserDestroyController;
+use App\Http\Controllers\UserEditController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('index/{id?}', [UserApiController::class, 'index']);
 Route::post('create', [UserApiController::class, 'create']);
 Route::post('createMultiple', [UserApiController::class, 'createMultiple']);
-Route::put('edit/{id}', [UserApiController::class, 'edit']);
+Route::put('edit/{id}', UserEditController::class);
 Route::delete('destroy/{id}', UserDestroyController::class);
