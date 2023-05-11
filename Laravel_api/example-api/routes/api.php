@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserApiController;
+use App\Http\Controllers\UserDestroyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,8 +25,4 @@ Route::get('index/{id?}', [UserApiController::class, 'index']);
 Route::post('create', [UserApiController::class, 'create']);
 Route::post('createMultiple', [UserApiController::class, 'createMultiple']);
 Route::put('edit/{id}', [UserApiController::class, 'edit']);
-Route::patch('update/{id}', [UserApiController::class, 'update']);
-Route::delete('destroy/{id}', [UserApiController::class, 'destroy']);
-Route::delete('destroyWithJson', [UserApiController::class, 'destroyWithJson']);
-Route::delete('destroyMultiple/{ids}', [UserApiController::class, 'destroyMultiple']);
-Route::delete('destryMultipleWithJson', [UserApiController::class, 'destryMultipleWithJson']);
+Route::delete('destroy/{id}', UserDestroyController::class);
