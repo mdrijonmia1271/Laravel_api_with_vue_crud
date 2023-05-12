@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EditedValidated;
 use App\Http\Requests\MultipleValidated;
 use App\Http\Requests\UserValidation;
 use App\Models\User;
-use Validator;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class UserApiController extends Controller
 {
@@ -22,12 +21,6 @@ class UserApiController extends Controller
             ],200);
         }
 
-        // return response()->json([
-        //     'message' => 'Password reset email sent.',
-        //     'data' => $response,
-        // ]);
-
-
     }
     public function create(UserValidation $request){
         if($request->isMethod('post')){
@@ -39,7 +32,7 @@ class UserApiController extends Controller
             $user->password = bcrypt($data['password']); 
             $user->save();
             return response()->json([
-                'message'=>'User Successfully Added'
+                'message'=>'User Successfully Added',
             ],201);
         }
     }
